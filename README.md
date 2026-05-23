@@ -6,7 +6,17 @@ Live site: https://myusuf3.github.io/happy-corp/
 
 ## What this repo is
 
-The current site is one static HTML page, one stylesheet, and one SVG favicon. No build step. No framework. No dependencies. Open `index.html` in a browser and that's the whole product.
+The site shows one tiny moment of joy each day. Today's joy lives at `/`; every seeded day has its own stable URL at `/d/YYYY-MM-DD/` so it's shareable. The content is a hand-written list in [`data/joys.json`](./data/joys.json) and the pages are static HTML — no framework, no runtime dependencies. The only "build step" is a tiny Python script that emits the day pages from the JSON; output is checked into git.
+
+## Content workflow
+
+1. Edit [`data/joys.json`](./data/joys.json) — each entry is `{ "date": "YYYY-MM-DD", "copy": "…", "emoji": "…" }`. Keep the voice warm/tiny/handcrafted (see below).
+2. Run `python3 scripts/generate.py`. This rewrites `index.html` and every `d/YYYY-MM-DD/index.html`.
+3. Commit and push.
+
+The root page also embeds the joy list inline and uses a tiny inline script to pick today's entry by local date. If JavaScript is off, the page still renders a joy (the first seeded entry) with the caption "a tiny moment of joy" — the core moment still works.
+
+`/d/YYYY-MM-DD/` pages are fully static — no script needed for the core moment. They're the canonical shareable URL for a given day.
 
 ## Stack
 
@@ -54,7 +64,7 @@ To turn it on (one-time, ~30 seconds):
 
 1. Sign in at [dash.cloudflare.com](https://dash.cloudflare.com) → **Analytics & Logs** → **Web Analytics** → **Add a site** → choose **Manual setup**, enter `myusuf3.github.io/happy-corp`.
 2. Copy the `token` value out of the snippet Cloudflare gives you (the long hex string inside `data-cf-beacon='{"token":"…"}'`).
-3. Open `index.html`, replace `REPLACE_WITH_CF_TOKEN` with that token, commit and push. The beacon script is a no-op until the token is real, so there is zero risk of stray events before then.
+3. Replace `REPLACE_WITH_CF_TOKEN` with that token in [`scripts/generate.py`](./scripts/generate.py) (inside the `ANALYTICS_STUB` block), then run `python3 scripts/generate.py` to propagate it into `index.html` and every `d/YYYY-MM-DD/index.html`. Commit and push. The beacon script is a no-op until the token is real, so there is zero risk of stray events before then.
 
 That's it — no build step, no extra dependency.
 

@@ -3,28 +3,56 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>happy corp — hello</title>
-    <meta name="description" content="happy corp: a tiny company that exists to bring joy." />
+    <title>happy corp — a tiny moment of joy</title>
+    <meta name="description" content="happy corp — one tiny, handcrafted moment of joy every day." />
     <meta name="theme-color" content="#fff7d6" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main>
-      <p class="wave" aria-hidden="true">👋</p>
-      <h1>hello from happy&nbsp;corp.</h1>
-      <p class="lede">
-        We&rsquo;re a tiny new company. Our whole job is to bring you a little
-        more joy than you had a minute ago.
-      </p>
-      <p class="footnote">
-        Nothing to sign up for yet. Come back soon &mdash; we&rsquo;re making
-        something for you.
-      </p>
+    <main class="joy" aria-live="polite">
+      <p class="joy-visual" aria-hidden="true" id="joy-visual">🌞</p>
+      <p class="joy-copy" id="joy-copy">a quiet good morning</p>
+      <p class="joy-date" id="joy-date">a tiny moment of joy</p>
+      <p class="about">one tiny, handcrafted moment of joy, every day. that’s the whole thing.</p>
     </main>
     <footer>
       <a href="privacy.html">privacy</a>
     </footer>
+    <script id="joys-data" type="application/json">[{"date": "2026-05-22", "copy": "a quiet good morning", "emoji": "🌞"}, {"date": "2026-05-23", "copy": "the cat next door says hi", "emoji": "🐈"}, {"date": "2026-05-24", "copy": "your shoulders, gently lower", "emoji": "🌿"}, {"date": "2026-05-25", "copy": "the kettle is doing its best", "emoji": "🫖"}, {"date": "2026-05-26", "copy": "a tiny breeze, just for you", "emoji": "🍃"}, {"date": "2026-05-27", "copy": "someone, somewhere, is laughing", "emoji": "✨"}, {"date": "2026-05-28", "copy": "the sky has shown up again", "emoji": "☁️"}, {"date": "2026-05-29", "copy": "a paper boat in a puddle", "emoji": "⛵"}, {"date": "2026-05-30", "copy": "warm bread is still a miracle", "emoji": "🍞"}, {"date": "2026-05-31", "copy": "the moon left a note for you", "emoji": "🌙"}, {"date": "2026-06-01", "copy": "a stray balloon got away", "emoji": "🎈"}, {"date": "2026-06-02", "copy": "snails are taking their time", "emoji": "🐌"}, {"date": "2026-06-03", "copy": "a stranger held the door", "emoji": "🚪"}, {"date": "2026-06-04", "copy": "stars are still on", "emoji": "🌟"}, {"date": "2026-06-05", "copy": "tea, in your favorite mug", "emoji": "☕"}, {"date": "2026-06-06", "copy": "soft socks day", "emoji": "🧦"}, {"date": "2026-06-07", "copy": "a small bird is house-hunting", "emoji": "🐦"}, {"date": "2026-06-08", "copy": "an old song found you", "emoji": "🎶"}, {"date": "2026-06-09", "copy": "the moon, awake too", "emoji": "🌝"}, {"date": "2026-06-10", "copy": "a peach was perfect today", "emoji": "🍑"}, {"date": "2026-06-11", "copy": "rain on a window, somewhere", "emoji": "🌧️"}, {"date": "2026-06-12", "copy": "a bee is doing important work", "emoji": "🐝"}, {"date": "2026-06-13", "copy": "a quiet hour, all yours", "emoji": "🕯️"}, {"date": "2026-06-14", "copy": "a tiny shell on a big shore", "emoji": "🐚"}, {"date": "2026-06-15", "copy": "the wind made the trees applaud", "emoji": "🌳"}, {"date": "2026-06-16", "copy": "a long sigh, and then a smile", "emoji": "🤍"}, {"date": "2026-06-17", "copy": "a porch light, left on for you", "emoji": "💡"}, {"date": "2026-06-18", "copy": "a small kindness, unannounced", "emoji": "💌"}, {"date": "2026-06-19", "copy": "the bakery smells like memory", "emoji": "🥖"}, {"date": "2026-06-20", "copy": "a soft landing, eventually", "emoji": "🪶"}]</script>
+    <script>
+      (function () {
+        try {
+          var node = document.getElementById("joys-data");
+          if (!node) return;
+          var data = JSON.parse(node.textContent);
+          if (!Array.isArray(data) || data.length === 0) return;
+          var weekdays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+          var months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
+          function pad(n) { return n < 10 ? "0" + n : "" + n; }
+          function humanize(d) {
+            return weekdays[(d.getDay() + 6) % 7] + ", " + months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+          }
+          var now = new Date();
+          var todayIso = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate());
+          var entry = null;
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].date === todayIso) { entry = data[i]; break; }
+          }
+          if (!entry) {
+            var first = new Date(data[0].date + "T00:00:00");
+            var todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            var diff = Math.floor((todayLocal - first) / 86400000);
+            var idx = ((diff % data.length) + data.length) % data.length;
+            entry = data[idx];
+          }
+          document.getElementById("joy-visual").textContent = entry.emoji;
+          document.getElementById("joy-copy").textContent = entry.copy;
+          document.getElementById("joy-date").textContent = humanize(now);
+          document.title = entry.copy + " — happy corp";
+        } catch (err) { /* keep static fallback */ }
+      })();
+    </script>
     <script>
       // Cloudflare Web Analytics — privacy-respecting, no cookies, no PII.
       // See privacy.html for what is and isn't collected.
