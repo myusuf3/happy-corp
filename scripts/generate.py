@@ -28,23 +28,9 @@ def humanize(d: date) -> str:
     return f"{WEEKDAYS[d.weekday()]}, {MONTHS[d.month - 1]} {d.day}, {d.year}"
 
 
-# Cloudflare Web Analytics stub — keep in sync with the same block in any
-# hand-authored page (e.g. privacy.html). The token is intentionally a
-# placeholder; the loader is a no-op until it's swapped for a real token.
-ANALYTICS_STUB = """    <script>
-      // Cloudflare Web Analytics — privacy-respecting, no cookies, no PII.
-      // See privacy.html for what is and isn't collected.
-      // Swap the token below when the CF Web Analytics site is created.
-      (function () {
-        var token = "REPLACE_WITH_CF_TOKEN";
-        if (!token || token === "REPLACE_WITH_CF_TOKEN") return;
-        var s = document.createElement("script");
-        s.defer = true;
-        s.src = "https://static.cloudflareinsights.com/beacon.min.js";
-        s.setAttribute("data-cf-beacon", JSON.stringify({ token: token }));
-        document.head.appendChild(s);
-      })();
-    </script>"""
+# Umami analytics — privacy-respecting, no cookies, no PII, self-hosted.
+# See privacy.html for what is and isn't collected.
+ANALYTICS_STUB = '    <script async src="https://umami.booq.cc/script.js" data-website-id="62378df5-6c68-4ab8-a7f0-e1b20f31f91c"></script>'
 
 
 DAY_TEMPLATE = """<!doctype html>
