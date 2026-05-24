@@ -33,6 +33,23 @@ def humanize(d: date) -> str:
 ANALYTICS_STUB = '    <script async src="https://umami.booq.cc/script.js" data-website-id="62378df5-6c68-4ab8-a7f0-e1b20f31f91c"></script>'
 
 
+HAND_SVG = """      <span class="hand-wrap" aria-hidden="true">
+        <svg class="hand" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="hello">
+          <rect x="68" y="198" width="64" height="22" rx="5" fill="#ff6f61" />
+          <g fill="#f7c69e">
+            <rect x="58" y="92" width="84" height="108" rx="22" />
+            <rect x="64" y="38" width="18" height="65" rx="9" />
+            <rect x="86" y="22" width="18" height="80" rx="9" />
+            <rect x="108" y="32" width="18" height="72" rx="9" />
+            <rect x="130" y="50" width="16" height="55" rx="8" />
+            <g transform="rotate(-32 48 130)">
+              <rect x="20" y="118" width="56" height="22" rx="11" />
+            </g>
+          </g>
+        </svg>
+      </span>"""
+
+
 DAY_TEMPLATE = """<!doctype html>
 <html lang="en">
   <head>
@@ -46,7 +63,7 @@ DAY_TEMPLATE = """<!doctype html>
   </head>
   <body>
     <main class="joy">
-      <p class="joy-visual" aria-hidden="true">{emoji}</p>
+{hand_svg}
       <p class="joy-copy">{copy}</p>
       <p class="joy-date">{human_date}</p>
       <p class="about">one tiny, handcrafted moment of joy, every day. that’s the whole thing.</p>
@@ -75,7 +92,7 @@ ROOT_TEMPLATE = """<!doctype html>
   </head>
   <body>
     <main class="joy" aria-live="polite">
-      <p class="joy-visual" aria-hidden="true" id="joy-visual">{fallback_emoji}</p>
+{hand_svg}
       <p class="joy-copy" id="joy-copy">{fallback_copy}</p>
       <p class="joy-date" id="joy-date">a tiny moment of joy</p>
       <p class="about">one tiny, handcrafted moment of joy, every day. that’s the whole thing.</p>
@@ -110,7 +127,6 @@ ROOT_TEMPLATE = """<!doctype html>
             var idx = ((diff % data.length) + data.length) % data.length;
             entry = data[idx];
           }}
-          document.getElementById("joy-visual").textContent = entry.emoji;
           document.getElementById("joy-copy").textContent = entry.copy;
           document.getElementById("joy-date").textContent = humanize(now);
           document.title = entry.copy + " — happy corp";
@@ -137,8 +153,8 @@ def main() -> None:
         day_dir.mkdir(parents=True, exist_ok=True)
         html = DAY_TEMPLATE.format(
             copy=entry["copy"],
-            emoji=entry["emoji"],
             human_date=humanize(d),
+            hand_svg=HAND_SVG,
             analytics=ANALYTICS_STUB,
         )
         (day_dir / "index.html").write_text(html, encoding="utf-8")
@@ -146,8 +162,8 @@ def main() -> None:
     fallback = joys[0]
     root_html = ROOT_TEMPLATE.format(
         joys_json=json.dumps(joys, ensure_ascii=False),
-        fallback_emoji=fallback["emoji"],
         fallback_copy=fallback["copy"],
+        hand_svg=HAND_SVG,
         weekdays_js=json.dumps(WEEKDAYS),
         months_js=json.dumps(MONTHS),
         analytics=ANALYTICS_STUB,

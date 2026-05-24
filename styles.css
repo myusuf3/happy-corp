@@ -93,38 +93,6 @@ main.prose .backlink {
   font-size: 0.95rem;
 }
 
-.wave {
-  font-size: clamp(3rem, 12vw, 5rem);
-  margin: 0 0 1rem;
-  line-height: 1;
-  animation: wave 2.4s ease-in-out 0.6s 2;
-  transform-origin: 70% 80%;
-  display: inline-block;
-}
-
-@keyframes wave {
-  0%,
-  60%,
-  100% {
-    transform: rotate(0deg);
-  }
-  15% {
-    transform: rotate(14deg);
-  }
-  30% {
-    transform: rotate(-8deg);
-  }
-  45% {
-    transform: rotate(10deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .wave {
-    animation: none;
-  }
-}
-
 h1 {
   font-size: clamp(2rem, 6vw, 3rem);
   font-weight: 600;
@@ -170,12 +138,43 @@ main.joy {
   align-items: stretch;
 }
 
-.joy-visual {
-  font-size: clamp(4.5rem, 22vw, 8rem);
-  line-height: 1;
-  margin: 0 0 1.25rem;
-  max-width: 100%;
-  animation: settle 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+.hand-wrap {
+  display: inline-block;
+  margin: 0 auto 1.25rem;
+  animation: settle 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.hand {
+  display: block;
+  width: clamp(5rem, 22vw, 8rem);
+  height: auto;
+  transform-origin: 50% 95%;
+  animation: hand-wave 1.6s ease-in-out 450ms 2 both;
+}
+
+@keyframes hand-wave {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(-18deg);
+  }
+  25% {
+    transform: rotate(16deg);
+  }
+  40% {
+    transform: rotate(-14deg);
+  }
+  55% {
+    transform: rotate(10deg);
+  }
+  70% {
+    transform: rotate(-6deg);
+  }
+  85% {
+    transform: rotate(3deg);
+  }
 }
 
 .joy-copy {
@@ -219,7 +218,8 @@ main.joy {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .joy-visual {
+  .hand-wrap,
+  .hand {
     animation: none;
   }
 }
